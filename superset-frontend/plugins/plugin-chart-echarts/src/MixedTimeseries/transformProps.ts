@@ -677,6 +677,13 @@ export default function transformProps(
   const { setDataMask = () => {}, onContextMenu } = hooks;
   const alignTicks = yAxisIndex !== yAxisIndexB;
 
+  // For category axes, explicitly provide the category list so ECharts
+  // correctly maps [category, value] data points to axis positions.
+  const xAxisCategoryData =
+    xAxisType === AxisType.Category && rawSeriesA.length > 0
+      ? (rawSeriesA[0].data as [any, any][]).map(point => point[0])
+      : undefined;
+
   const echartOptions: EChartsCoreOption = {
     useUTC: true,
     grid: {
@@ -685,6 +692,7 @@ export default function transformProps(
     },
     xAxis: {
       type: xAxisType,
+      ...(xAxisCategoryData && { data: xAxisCategoryData }),
       name: xAxisTitle,
       nameGap: convertInteger(xAxisTitleMargin),
       nameLocation: 'middle',
