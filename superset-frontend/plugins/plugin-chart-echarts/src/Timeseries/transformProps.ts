@@ -863,6 +863,18 @@ export default function transformProps(
   // consecutive duplicate labels.
   const showMaxLabel =
     xAxisType === AxisType.Time && xAxisLabelRotation === 0 && !!timeGrainSqla;
+
+  // Pin the axis extent to the last data point so that showMaxLabel
+  // renders a label at the actual last value rather than at a "nice"
+  // boundary ECharts may compute beyond the data range.
+  const xAxisTimeMax =
+    showMaxLabel && xAxisMax === undefined && rebasedData.length > 0
+      ? rebasedData.reduce((max: number, d) => {
+          const val = d[xAxisLabel];
+          return typeof val === 'number' && val > max ? val : max;
+        }, -Infinity)
+      : undefined;
+
   const deduplicatedFormatter = showMaxLabel
     ? (() => {
         let lastLabel: string | undefined;
@@ -938,6 +950,7 @@ export default function transformProps(
       xAxisMax,
       seriesType,
     ),
+    ...(Number.isFinite(xAxisTimeMax) && { max: xAxisTimeMax }),
   };
 
   // Adapt y-axis to chart height: three tiers based on available space.
