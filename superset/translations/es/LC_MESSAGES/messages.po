@@ -12290,8 +12290,9 @@ msgstr "Enviar"
 msgid "Subtitle"
 msgstr "Subtítulo"
 
-msgid "Subtotal"
-msgstr "Subtotal"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
+msgstr ""
 
 msgid "Success"
 msgstr "Realizado correctamente"

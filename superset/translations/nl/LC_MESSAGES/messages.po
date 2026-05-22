@@ -12300,8 +12300,9 @@ msgstr "Bevestigen"
 msgid "Subtitle"
 msgstr "Titel tabblad"
 
-msgid "Subtotal"
-msgstr "Subtotaal"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
+msgstr ""
 
 msgid "Success"
 msgstr "Succes"

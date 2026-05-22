@@ -12201,8 +12201,9 @@ msgstr "إرسال"
 msgid "Subtitle"
 msgstr "عنوان علامة التبويب"
 
-msgid "Subtotal"
-msgstr "المجموع الفرعي"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
+msgstr ""
 
 msgid "Success"
 msgstr "نجاح"

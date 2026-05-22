@@ -12768,8 +12768,9 @@ msgstr "Zatwierdź"
 msgid "Subtitle"
 msgstr "Tytuł zakładki"
 
-msgid "Subtotal"
-msgstr "Suma częściowa"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
+msgstr ""
 
 msgid "Success"
 msgstr "Sukces"

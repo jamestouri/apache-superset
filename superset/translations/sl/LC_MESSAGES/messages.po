@@ -12154,8 +12154,9 @@ msgstr "Pošlji"
 msgid "Subtitle"
 msgstr "Naslov zavihka"
 
-msgid "Subtotal"
-msgstr "Delna vsota"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
+msgstr ""
 
 msgid "Success"
 msgstr "Uspelo"
