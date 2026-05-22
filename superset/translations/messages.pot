@@ -11076,7 +11076,8 @@ msgstr ""
 msgid "Subtitle"
 msgstr ""
 
-msgid "Subtotal"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
 msgstr ""
 
 msgid "Success"

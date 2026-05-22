@@ -13169,8 +13169,9 @@ msgstr "Soumettre"
 msgid "Subtitle"
 msgstr "Titre de l’onglet"
 
-msgid "Subtotal"
-msgstr "Sous-total"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
+msgstr ""
 
 msgid "Success"
 msgstr "Réussite"

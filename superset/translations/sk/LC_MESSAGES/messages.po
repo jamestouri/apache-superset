@@ -11313,7 +11313,8 @@ msgstr ""
 msgid "Subtitle"
 msgstr "Importovať dashboard"
 
-msgid "Subtotal"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
 msgstr ""
 
 msgid "Success"

@@ -12387,8 +12387,9 @@ msgstr "Senden"
 msgid "Subtitle"
 msgstr "Registerkartentitel"
 
-msgid "Subtotal"
-msgstr "Zwischensumme"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
+msgstr ""
 
 msgid "Success"
 msgstr "Erfolg"

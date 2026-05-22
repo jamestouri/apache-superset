@@ -12119,8 +12119,9 @@ msgstr "ارسال"
 msgid "Subtitle"
 msgstr "عنوان برگه"
 
-msgid "Subtotal"
-msgstr "زیرمجموعه"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
+msgstr ""
 
 msgid "Success"
 msgstr "موفقیت"

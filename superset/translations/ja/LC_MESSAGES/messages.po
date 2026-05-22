@@ -11369,8 +11369,9 @@ msgstr "送信"
 msgid "Subtitle"
 msgstr "サブタイトル"
 
-msgid "Subtotal"
-msgstr "小計"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
+msgstr ""
 
 msgid "Success"
 msgstr "成功"

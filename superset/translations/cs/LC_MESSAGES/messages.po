@@ -12042,8 +12042,9 @@ msgstr "Odeslat"
 msgid "Subtitle"
 msgstr "Podtitulek"
 
-msgid "Subtotal"
-msgstr "Mezisoučet"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
+msgstr ""
 
 msgid "Success"
 msgstr "Úspěch"

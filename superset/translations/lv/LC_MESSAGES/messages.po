@@ -11813,8 +11813,9 @@ msgstr "Iesniegt"
 msgid "Subtitle"
 msgstr "Apakšvirsraksts"
 
-msgid "Subtotal"
-msgstr "Starpsumma"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
+msgstr ""
 
 msgid "Success"
 msgstr "Veiksmīgi"

@@ -11783,8 +11783,9 @@ msgstr "Отправить"
 msgid "Subtitle"
 msgstr "Подзаголовок"
 
-msgid "Subtotal"
-msgstr "Подытог"
+#, python-format
+msgid "Subvalue (%(aggfunc)s)"
+msgstr ""
 
 msgid "Success"
 msgstr "Успешно"
