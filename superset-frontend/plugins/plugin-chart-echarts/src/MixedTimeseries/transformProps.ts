@@ -86,6 +86,7 @@ import {
   reorderForecastSeries,
 } from '../utils/forecast';
 import { convertInteger } from '../utils/convertInteger';
+import { computeLinearTrendLine } from '../utils/trendLine';
 import { defaultGrid, defaultYAxis } from '../defaults';
 import {
   getPadding,
@@ -183,6 +184,8 @@ export default function transformProps(
     showLegend,
     showValue,
     showValueB,
+    showTrendLine,
+    showTrendLineB,
     onlyTotal,
     onlyTotalB,
     stack,
@@ -571,6 +574,79 @@ export default function transformProps(
       mapSeriesIdToAxis(transformedSeries, yAxisIndexB);
     }
   });
+
+  // Generate trend lines when enabled
+  if (showTrendLine) {
+    rawSeriesA.forEach(entry => {
+      const entryName = String(entry.name || '');
+      const dataPoints = (entry.data as [number, number | null][]) || [];
+      const trendData = computeLinearTrendLine(dataPoints);
+      if (trendData.length > 0) {
+        const trendName = `${entryName} (Trend)`;
+        const colorScaleKey = getOriginalSeries(
+          inverted[entryName] || entryName,
+          array,
+        );
+        const trendSeries: SeriesOption = {
+          id: trendName,
+          name: trendName,
+          data: trendData,
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle: {
+            type: 'dashed',
+            width: 2,
+            opacity: 0.7,
+          },
+          itemStyle: {
+            color: colorScale(colorScaleKey, sliceId),
+          },
+          yAxisIndex: yAxisIndex ?? 0,
+          // @ts-expect-error
+          queryIndex: 0,
+        };
+        series.push(trendSeries);
+        mapSeriesIdToAxis(trendSeries, yAxisIndex);
+      }
+    });
+  }
+
+  if (showTrendLineB) {
+    rawSeriesB.forEach(entry => {
+      const entryName = String(entry.name || '');
+      const dataPoints = (entry.data as [number, number | null][]) || [];
+      const trendData = computeLinearTrendLine(dataPoints);
+      if (trendData.length > 0) {
+        const trendName = `${entryName} (Trend)`;
+        const colorScaleKey = getOriginalSeries(
+          inverted[entryName] || entryName,
+          array,
+        );
+        const trendSeries: SeriesOption = {
+          id: trendName,
+          name: trendName,
+          data: trendData,
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle: {
+            type: 'dashed',
+            width: 2,
+            opacity: 0.7,
+          },
+          itemStyle: {
+            color: colorScale(colorScaleKey, sliceId),
+          },
+          yAxisIndex: yAxisIndexB ?? 0,
+          // @ts-expect-error
+          queryIndex: 1,
+        };
+        series.push(trendSeries);
+        mapSeriesIdToAxis(trendSeries, yAxisIndexB);
+      }
+    });
+  }
 
   // default to 0-100% range when doing row-level contribution chart
   if (contributionMode === 'row' && stack) {

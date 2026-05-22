@@ -175,6 +175,18 @@ function createCustomizeSection(
     ],
     [
       {
+        name: `show_trend_line${controlSuffix}`,
+        config: {
+          type: 'CheckboxControl',
+          label: t('Show Trend Line'),
+          renderTrigger: true,
+          default: false,
+          description: t('Overlay a linear trend line on the series data'),
+        },
+      },
+    ],
+    [
+      {
         name: `area${controlSuffix}`,
         config: {
           type: 'CheckboxControl',
