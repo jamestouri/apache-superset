@@ -591,6 +591,19 @@ export default function transformProps(
 
   const showMaxLabel =
     xAxisType === AxisType.Time && xAxisLabelRotation === 0 && !!timeGrainSqla;
+
+  // Pin the axis extent to the last data point so that showMaxLabel
+  // renders a label at the actual last value rather than at a "nice"
+  // boundary ECharts may compute beyond the data range.
+  const allRebasedData = [...rebasedDataA, ...rebasedDataB];
+  const xAxisTimeMax =
+    showMaxLabel && xAxisMax === undefined && allRebasedData.length > 0
+      ? allRebasedData.reduce((max: number, d) => {
+          const val = d[xAxisLabel];
+          return typeof val === 'number' && val > max ? val : max;
+        }, -Infinity)
+      : undefined;
+
   const deduplicatedFormatter = showMaxLabel
     ? (() => {
         let lastLabel: string | undefined;
@@ -721,6 +734,7 @@ export default function transformProps(
           ? EchartsTimeseriesSeriesType.Bar
           : undefined,
       ),
+      ...(Number.isFinite(xAxisTimeMax) && { max: xAxisTimeMax }),
     },
     yAxis: [
       {
