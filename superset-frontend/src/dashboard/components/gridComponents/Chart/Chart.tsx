@@ -315,12 +315,12 @@ const Chart = (props: ChartProps) => {
   );
 
   useEffect(() => {
-    if (isExpanded) {
-      const descHeight =
-        isExpanded && descriptionRef.current
-          ? descriptionRef.current?.offsetHeight
-          : 0;
-      setDescriptionHeight(descHeight);
+    if (isExpanded && descriptionRef.current) {
+      const el = descriptionRef.current;
+      const style = getComputedStyle(el);
+      const marginTop = parseInt(style.marginTop, 10) || 0;
+      const marginBottom = parseInt(style.marginBottom, 10) || 0;
+      setDescriptionHeight(el.offsetHeight + marginTop + marginBottom);
     } else {
       setDescriptionHeight(0);
     }
@@ -719,6 +719,7 @@ const Chart = (props: ChartProps) => {
             __html: slice.description_markdown,
           }}
           role="complementary"
+          style={{ overflow: 'hidden' }}
         />
       )}
 
