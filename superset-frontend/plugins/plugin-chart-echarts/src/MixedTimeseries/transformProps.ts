@@ -105,6 +105,70 @@ import {
 import { getMetricDisplayName } from '../utils/metricDisplayName';
 import { mergeCustomEChartOptions } from '../utils/mergeCustomEChartOptions';
 
+function computeLinearRegression(data: [number | string, number][]): {
+  slope: number;
+  intercept: number;
+} {
+  const n = data.length;
+  if (n < 2) return { slope: 0, intercept: 0 };
+  let sumX = 0;
+  let sumY = 0;
+  let sumXY = 0;
+  let sumXX = 0;
+  for (let i = 0; i < n; i += 1) {
+    const x = i;
+    const y = Number(data[i][1]) || 0;
+    sumX += x;
+    sumY += y;
+    sumXY += x * y;
+    sumXX += x * x;
+  }
+  const denom = n * sumXX - sumX * sumX;
+  if (denom === 0) return { slope: 0, intercept: sumY / n };
+  const slope = (n * sumXY - sumX * sumY) / denom;
+  const intercept = (sumY - slope * sumX) / n;
+  return { slope, intercept };
+}
+
+function buildTrendLineSeries(
+  rawSeries: { name?: string; data?: [number | string, number][] }[],
+  displayNamePrefix: string,
+  colorScale: CategoricalColorScale,
+  sliceId: number | undefined,
+  yAxisIdx: number,
+): SeriesOption[] {
+  const trendSeries: SeriesOption[] = [];
+  rawSeries.forEach(entry => {
+    const entryData = (entry.data || []) as [number | string, number][];
+    if (entryData.length < 2) return;
+    const { slope, intercept } = computeLinearRegression(entryData);
+    const trendData: [number | string, number][] = entryData.map(
+      ([xVal], idx) => [xVal, slope * idx + intercept],
+    );
+    const baseName = String(entry.name || '');
+    const trendName = `${displayNamePrefix}${baseName} (Trend)`;
+    trendSeries.push({
+      id: trendName,
+      name: trendName,
+      data: trendData,
+      type: 'line',
+      smooth: true,
+      showSymbol: false,
+      lineStyle: {
+        type: 'dashed',
+        width: 2,
+        opacity: 0.7,
+      },
+      itemStyle: {
+        color: colorScale(entry.name || baseName, sliceId),
+      },
+      yAxisIndex: yAxisIdx,
+      tooltip: { show: true },
+    } as SeriesOption);
+  });
+  return trendSeries;
+}
+
 const getFormatter = (
   customFormatters: Record<string, ValueFormatter>,
   defaultFormatter: ValueFormatter,
@@ -181,6 +245,8 @@ export default function transformProps(
     seriesType,
     seriesTypeB,
     showLegend,
+    showTrendLine,
+    showTrendLineB,
     showValue,
     showValueB,
     onlyTotal,
@@ -571,6 +637,34 @@ export default function transformProps(
       mapSeriesIdToAxis(transformedSeries, yAxisIndexB);
     }
   });
+
+  if (showTrendLine) {
+    const trendLines = buildTrendLineSeries(
+      rawSeriesA,
+      '',
+      colorScale,
+      sliceId,
+      yAxisIndex ?? 0,
+    );
+    trendLines.forEach(tl => {
+      series.push(tl);
+      mapSeriesIdToAxis(tl, yAxisIndex);
+    });
+  }
+
+  if (showTrendLineB) {
+    const trendLines = buildTrendLineSeries(
+      rawSeriesB,
+      '',
+      colorScale,
+      sliceId,
+      yAxisIndexB ?? 0,
+    );
+    trendLines.forEach(tl => {
+      series.push(tl);
+      mapSeriesIdToAxis(tl, yAxisIndexB);
+    });
+  }
 
   // default to 0-100% range when doing row-level contribution chart
   if (contributionMode === 'row' && stack) {

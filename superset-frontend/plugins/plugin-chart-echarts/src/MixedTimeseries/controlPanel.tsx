@@ -280,6 +280,20 @@ function createCustomizeSection(
         },
       },
     ],
+    [
+      {
+        name: `show_trend_line${controlSuffix}`,
+        config: {
+          type: 'CheckboxControl',
+          label: t('Trend Line'),
+          renderTrigger: true,
+          default: false,
+          description: t(
+            'Show a linear trend line overlaid on the series to highlight the overall direction.',
+          ),
+        },
+      },
+    ],
     [<ControlSubSectionHeader>{t('Series Order')}</ControlSubSectionHeader>],
     [
       {
