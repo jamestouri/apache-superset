@@ -295,6 +295,31 @@ export default function transformProps(
     totalStackedValues: totalStackedValuesB,
     xAxisType,
   });
+
+  // Pin the axis max to the last data value so that showMaxLabel renders
+  // the label at the actual data boundary rather than at an auto-extended
+  // "nice" value that ECharts may choose.
+  let dataXAxisMax: number | undefined;
+  if (xAxisType === AxisType.Time && timeGrainSqla) {
+    for (const dataset of [rebasedDataA, rebasedDataB]) {
+      for (const d of dataset) {
+        const val = d[xAxisLabel];
+        const ts =
+          typeof val === 'number'
+            ? val
+            : typeof val === 'string'
+              ? new Date(val).getTime()
+              : NaN;
+        if (
+          !Number.isNaN(ts) &&
+          (dataXAxisMax === undefined || ts > dataXAxisMax)
+        ) {
+          dataXAxisMax = ts;
+        }
+      }
+    }
+  }
+
   const series: SeriesOption[] = [];
 
   const resolvedCurrency = resolveAutoCurrency(
@@ -729,6 +754,9 @@ export default function transformProps(
           ? EchartsTimeseriesSeriesType.Bar
           : undefined,
       ),
+      ...(showMaxLabel &&
+        dataXAxisMax !== undefined &&
+        xAxisMax === undefined && { max: dataXAxisMax }),
     },
     yAxis: [
       {
