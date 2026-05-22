@@ -884,8 +884,18 @@ export default function transformProps(
       })()
     : xAxisFormatter;
 
+  // For category axes, explicitly provide the category list so ECharts
+  // correctly maps [category, value] data points to axis positions.
+  const xAxisCategoryData =
+    xAxisType === AxisType.Category && rawSeries.length > 0
+      ? (rawSeries[0].data as [any, any][]).map(point =>
+          isHorizontal ? point[1] : point[0],
+        )
+      : undefined;
+
   let xAxis: any = {
     type: xAxisType,
+    ...(xAxisCategoryData && { data: xAxisCategoryData }),
     name: xAxisTitle,
     nameGap: convertInteger(xAxisTitleMargin),
     nameLocation: 'middle',
